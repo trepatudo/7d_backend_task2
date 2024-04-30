@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\Post;
 use Doctrine\ORM\EntityManagerInterface;
+use Domain\Post\PostManager;
 use Exception;
 use joshtronic\LoremIpsum;
 use Symfony\Component\Console\Command\Command;
@@ -16,20 +17,20 @@ class GenerateRandomPostCommand extends Command
     protected static $defaultName        = 'app:generate-random-post';
     protected static $defaultDescription = 'Generate a random post';
 
-    private EntityManagerInterface $em;
     private LoremIpsum             $loremIpsum;
 
-    private string $dateFormat;
+    private string      $dateFormat;
+    private PostManager $postManager;
 
     public function __construct(
-        EntityManagerInterface $em,
-        LoremIpsum $loremIpsum,
         string $name = null,
-        string $dateFormat
+        string $dateFormat,
+        PostManager $postManager,
+        LoremIpsum $loremIpsum
     ) {
-        $this->em         = $em;
         $this->loremIpsum = $loremIpsum;
         $this->dateFormat = $dateFormat;
+        $this->postManager = $postManager;
 
         parent::__construct($name);
     }
@@ -48,14 +49,9 @@ class GenerateRandomPostCommand extends Command
         $isSummaryPost = $input->getOption('summary');
         [$title, $content] = $isSummaryPost ? $this->getSummaryData() : $this->getRandomPostData();
 
-        $post = new Post();
-        $post->setTitle($title);
-        $post->setContent($content);
 
         try {
-            $this->em->persist($post);
-            $this->em->flush();
-
+            $this->postManager->addPost($title, $content);
             $output->writeln(sprintf('A %s post has been generated.', $isSummaryPost ? 'summary' : 'random'));
         } catch (Exception $e) {
             $output->writeln('<error>An error occurred while trying to generate post</error>');
