@@ -24,6 +24,7 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=10000)
+     * TODO: maybe move this into "text" instead of keeping it a varchar with long length?
      */
     private $content;
 

@@ -11,7 +11,7 @@
 <div class="example-wrapper">
     <article>
 
-        {% for post in posts %}
+        {% for post in pagination %}
             <h1><a href="{{ path('app_post_show', {id: post.id}) }}">{{ post.title }}</a></h1>
 
             <p>
@@ -20,5 +20,8 @@
         {% endfor %}
 
     </article>
+    <div class="navigation">
+    {{ knp_pagination_render(pagination) }}
+    </div>
 </div>
 {% endblock %}

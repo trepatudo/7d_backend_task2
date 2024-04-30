@@ -63,4 +63,9 @@ class PostRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function findAllQuery()
+    {
+        return $this->createQueryBuilder("p")->orderBy("p.id", "DESC");
+    }
 }
