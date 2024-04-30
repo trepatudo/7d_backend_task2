@@ -4,10 +4,11 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.date.format: 'Y-m-d'
     app.style.use_theme: '%env(bool:APP_USE_CSS_THEME)%'
-    app.style.timezone_as_text: '%env(bool:APP_USE_TIMEZONE_AS_TEXT)%'
+    app.style.timezone_as_select: '%env(bool:APP_USE_TIMEZONE_AS_SELECT)%'
     env(APP_USE_CSS_THEME): false
-    env(APP_USE_TIMEZONE_AS_TEXT): false
+    env(APP_USE_TIMEZONE_AS_SELECT): false
 
 services:
     # default configuration for services in *this* file
@@ -31,7 +32,8 @@ services:
 
     App\Form\DateTimezoneFormType:
         arguments:
-            $useTimezoneAsSelect: '%app.style.timezone_as_text%'
+            $useTimezoneAsSelect: '%app.style.timezone_as_select%'
+            $dateFormat: '%app.date.format%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
